@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
-import { authPing } from '../api/auth';
+import * as vscode from "vscode";
+import { authPing } from "../api/auth";
 import { Session, SessionStorage } from "./session";
 
 export const signIn = async () => {
@@ -51,7 +51,7 @@ export const signIn = async () => {
 
         await ss.store(newSession);
         if (!await authPing()) {
-            vscode.window.showErrorMessage("");
+            vscode.window.showErrorMessage("Can't ping");
             await ss.delete();
             return;
         }

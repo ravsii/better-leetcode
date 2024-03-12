@@ -14,7 +14,7 @@ export const leetFetch = async <T>(query: string, variables: Object = {}): Promi
         body: JSON.stringify({
             "query": query,
             "variables": variables,
-            "operationName": "skillStats",
+            // "operationName": "skillStats",
         }),
     });
     return response.json() as T;

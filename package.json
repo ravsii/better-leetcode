@@ -14,14 +14,49 @@
   "contributes": {
     "commands": [
       {
-        "command": "better-leetcode.signIn",
+        "command": "betterLeetcode.signIn",
         "title": "Better Leetcode: Sign In"
       },
       {
-        "command": "better-leetcode.signOut",
+        "command": "betterLeetcode.signOut",
         "title": "Better Leetcode: Sign Out"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "betterLeetcode",
+          "title": "Better Leetcode",
+          "icon": "resources/leetcode_original.svg"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "betterLeetcodeNotSignedIn",
+        "contents": "It seems like you're not signed in or your session is expired\n[Sign in](command:betterLeetcode.signIn)"
+      }
+    ],
+    "views": {
+      "betterLeetcode": [
+        {
+          "id": "betterLeetcodeNotSignedIn",
+          "name": "Sign in",
+          "when": "!betterLeetcode.signedIn"
+        },
+        {
+          "id": "betterLeetcodeProblems",
+          "name": "Problems",
+          "when": "betterLeetcode.signedIn"
+        },
+        {
+          "id": "betterLeetcodeStats",
+          "name": "Statistics",
+          "visibility": "collapsed",
+          "when": "betterLeetcode.signedIn"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

@@ -7,9 +7,24 @@ Note: This is still in alpha:
 * ⚠️ Works only for EU endpoint (for now)
 * ⚠️ Only cookie auth is supported at the moment
 
-## TODO
+## WIP
 
-TODO
+* [x] Auth (Session handler)
+* [x] Request API
+* [ ] Problem list
+* [ ] Individual problem
+* [ ] Sending submissions
+  * [ ] Tests
+    * [ ] Add \ Delete \ Edit tests within vscode (vscode-leetcode can't do that)
+  * [ ] Submissions
+  * [ ] Result screen
+* [ ] Daily question
+* [ ] Stats
+* [ ] Search
+* [ ] Settings
+  * [ ] Langs
+    * [ ] Fallback lang?
+  * [ ] File location
 
 ## Inspiration
 
