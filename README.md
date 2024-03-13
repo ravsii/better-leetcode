@@ -11,15 +11,18 @@ Note: This is still in alpha:
 
 * [x] Auth (Session handler)
 * [x] Request API
-* [ ] Problem list
+* [x] Problem list
 * [ ] Individual problem
+  * [x] API
+  * [ ] New Preview tab
+  * [ ] New tab with actual code
 * [ ] Sending submissions
   * [ ] Tests
     * [ ] Add \ Delete \ Edit tests within vscode (vscode-leetcode can't do that)
   * [ ] Submissions
   * [ ] Result screen
-* [ ] Daily question
-* [ ] Stats
+* [x] Daily question
+* [ ] Stats - In Progress
 * [ ] Search
 * [ ] Sessions
 * [ ] Settings
