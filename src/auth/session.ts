@@ -17,7 +17,7 @@ export class SessionStorage {
         SessionStorage._instance = new SessionStorage(context.secrets);
         let ss = SessionStorage._instance;
         if (await ss.get()) {
-            commands.executeCommand("setContext", "betterLeetcode.signedIn", true);
+            ss.setSignedIn();
         }
     }
 
@@ -27,7 +27,7 @@ export class SessionStorage {
 
     async store(token: Session): Promise<void> {
         this.secretStorage.store(SESSION_KEY, JSON.stringify(token));
-        commands.executeCommand("setContext", "betterLeetcode.signedIn", true);
+        this.setSignedIn();
     }
 
     async get(): Promise<Session | undefined> {
@@ -41,6 +41,14 @@ export class SessionStorage {
 
     async delete(): Promise<void> {
         this.secretStorage.delete(SESSION_KEY);
-        commands.executeCommand("setContext", "betterLeetcode.signedIn", false);
+        this.setSignedOut();
+    }
+
+    private async setSignedIn() {
+        await commands.executeCommand("setContext", CTX_SIGNED_IN, true);
+    }
+
+    private async setSignedOut() {
+        await commands.executeCommand("setContext", CTX_SIGNED_IN, false);
     }
 }
