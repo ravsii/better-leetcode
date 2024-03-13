@@ -21,10 +21,11 @@ Note: This is still in alpha:
 * [ ] Daily question
 * [ ] Stats
 * [ ] Search
+* [ ] Sessions
 * [ ] Settings
   * [ ] Langs
     * [ ] Fallback lang?
-  * [ ] File location
+  * [ ] Files location
 
 ## Inspiration
 
