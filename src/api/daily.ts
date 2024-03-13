@@ -1,7 +1,7 @@
-import { DailyQuestion, Data } from "../models";
-import { leetRequest } from "./request";
+import { DailyQuestion, Data } from "../models"
+import { leetRequest } from "./request"
 
-const operationName = "questionOfToday";
+const operationName = "questionOfToday"
 
 interface response {
   activeDailyCodingChallengeQuestion: DailyQuestion
@@ -9,10 +9,10 @@ interface response {
 
 export const getDailyQuestion = async (): Promise<DailyQuestion> => {
   let res = await leetRequest<Data<response>>(dailyQuery, {
-    operationName: operationName
-  });
-  return res.data.activeDailyCodingChallengeQuestion;
-};
+    operationName: operationName 
+  })
+  return res.data.activeDailyCodingChallengeQuestion
+}
 
 const dailyQuery = `#graphql
 query questionOfToday {
@@ -40,4 +40,4 @@ query questionOfToday {
     }
   }
 }
-`;
+`

@@ -17,7 +17,7 @@ export enum Difficulty {
  
 export interface ProblemSet {
     questions: Array<Question>
-    total: number
+    total: number 
 }
 
 export interface Question {

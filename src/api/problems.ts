@@ -10,7 +10,7 @@ export enum CategorySlug {
   Database = "database",
   Javascript = "javascript",
   Pandas = "pandas",
-  Shell = "shell",
+  Shell = "shell", 
 }
 
 export const getQuestionList = async (category: CategorySlug, filters = {}, limit = 100, skip = 0): Promise<ProblemSet> => {

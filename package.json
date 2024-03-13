@@ -20,6 +20,11 @@
       {
         "command": "betterLeetcode.signOut",
         "title": "Better Leetcode: Sign Out"
+      },
+      {
+        "command": "betterLeetcode.refreshProblems",
+        "title": "Refresh",
+        "icon": "$(extensions-refresh)"
       }
     ],
     "viewsContainers": {
@@ -37,6 +42,15 @@
         "contents": "It seems like you're not signed in or your session is expired\n[Sign in](command:betterLeetcode.signIn)"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "betterLeetcode.refreshProblems",
+          "when": "view == betterLeetcodeProblems",
+          "group": "navigation"
+        }
+      ]
+    },
     "views": {
       "betterLeetcode": [
         {

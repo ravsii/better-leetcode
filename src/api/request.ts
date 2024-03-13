@@ -1,6 +1,6 @@
-import { SessionStorage } from "../auth/session";
+import { SessionStorage } from "../auth/session"
 
-const endpoint = new URL("https://leetcode.com/graphql/");
+const endpoint = new URL("https://leetcode.com/graphql/")
 
 interface queryBody {
     query: string
@@ -11,7 +11,7 @@ interface queryBody {
 interface variables {
     [key: string]: any
 }
-
+ 
 interface opts {
     variables?: variables
     operationName?: string
@@ -24,11 +24,11 @@ interface opts {
  * @returns response.json() as T
  */
 export const leetRequest = async <T>(query: string, opts: opts = {}): Promise<T> => {
-    let token = SessionStorage.instance.get();
+    let token = SessionStorage.instance.get()
 
-    let body: queryBody = { "query": query };
-    if (opts.variables) { body.variables = opts.variables; }
-    if (opts.operationName) { body.operationName = opts.operationName; }
+    let body: queryBody = { "query": query }
+    if (opts.variables) { body.variables = opts.variables }
+    if (opts.operationName) { body.operationName = opts.operationName }
 
     const response = await fetch(endpoint, {
         method: "POST",
@@ -37,6 +37,6 @@ export const leetRequest = async <T>(query: string, opts: opts = {}): Promise<T>
             "Cookie": `csrftoken=${token}`,
         },
         body: JSON.stringify(body),
-    });
-    return response.json() as T;
-};
+    })
+    return response.json() as T
+}

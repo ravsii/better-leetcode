@@ -3,19 +3,38 @@ import { getDailyQuestion } from "../api/daily"
 import { CategorySlug, getQuestionList } from "../api/problems"
 import { ProblemSet } from "../models"
 
-export class ProblemSetProvider implements vscode.TreeDataProvider<ProblemItem> {
-    constructor() { }
+type ListItem = ProblemSetListItem | ProblemListItem
 
-    getTreeItem(element: ProblemItem): vscode.TreeItem {
+export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<ListItem | undefined | null | void> = new vscode.EventEmitter<ListItem | undefined | null | void>()
+    readonly onDidChangeTreeData: vscode.Event<ListItem | undefined | null | void> = this._onDidChangeTreeData.event
+
+    constructor(context: vscode.ExtensionContext) {
+        context.subscriptions.push(
+            vscode.commands.registerCommand("betterLeetcode.refreshProblems", this.refresh),
+            vscode.commands.registerCommand("betterLeetcode.previewProblem",
+                (p: ProblemListItem) => {
+                    vscode.window.showInformationMessage(`clicked on ${p.name}`)
+                }
+            ),
+            vscode.window.createTreeView("betterLeetcodeProblems", { treeDataProvider: this })
+        )
+    }
+
+    refresh(): void {
+        this._onDidChangeTreeData.fire()
+    }
+
+    getTreeItem(element: ListItem): vscode.TreeItem {
         return element
     }
 
-    async getChildren(item?: ProblemItem): Promise<ProblemItem[]> {
-        if (!item) { // root 
+    async getChildren(item?: ListItem): Promise<ListItem[]> {
+        if (!item) { // root
             return Promise.resolve(this.getRootCategories())
         }
 
-        if (item instanceof ProblemSetItem) { // folders
+        if (item instanceof ProblemSetListItem) { // folders 
             return Promise.resolve(this.getSubCategories(item.category))
         }
 
@@ -23,36 +42,36 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ProblemItem> 
         return Promise.resolve([])
     }
 
-    private getRootCategories(): ProblemSetItem[] {
+    private getRootCategories(): ProblemSetListItem[] {
         return [
-            new ProblemSetItem("Daily", vscode.TreeItemCollapsibleState.Collapsed, Category.Daily),
-            new ProblemSetItem("All", vscode.TreeItemCollapsibleState.Collapsed, Category.All),
-            new ProblemSetItem("Categories", vscode.TreeItemCollapsibleState.Collapsed, Category.Categories),
+            new ProblemSetListItem("Daily", Category.Daily),
+            new ProblemSetListItem("All", Category.All),
+            new ProblemSetListItem("Categories", Category.Categories),
         ]
     }
 
-    private async getSubCategories(category: Category): Promise<Array<ProblemItem>> {
+    private async getSubCategories(category: Category): Promise<Array<ProblemListItem>> {
         switch (category) {
             case Category.Categories:
                 return [
-                    new ProblemSetItem("Algorithms", vscode.TreeItemCollapsibleState.Collapsed, Category.Algorithms),
-                    new ProblemSetItem("Concurrency", vscode.TreeItemCollapsibleState.Collapsed, Category.Concurrency),
-                    new ProblemSetItem("Database", vscode.TreeItemCollapsibleState.Collapsed, Category.Database),
-                    new ProblemSetItem("Javascript", vscode.TreeItemCollapsibleState.Collapsed, Category.Javascript),
-                    new ProblemSetItem("Pandas", vscode.TreeItemCollapsibleState.Collapsed, Category.Pandas),
-                    new ProblemSetItem("Shell", vscode.TreeItemCollapsibleState.Collapsed, Category.Shell),
+                    new ProblemSetListItem("Algorithms", Category.Algorithms),
+                    new ProblemSetListItem("Concurrency", Category.Concurrency),
+                    new ProblemSetListItem("Database", Category.Database),
+                    new ProblemSetListItem("Javascript", Category.Javascript),
+                    new ProblemSetListItem("Pandas", Category.Pandas),
+                    new ProblemSetListItem("Shell", Category.Shell),
                 ]
 
             // Categories with no sub-categories handled here
             default:
-                return this.getCategoryProblems(category) 
+                return this.getCategoryProblems(category)
         }
     }
 
-    private async getCategoryProblems(category: Category): Promise<Array<ProblemItem>> {
+    private async getCategoryProblems(category: Category): Promise<Array<ProblemListItem>> {
         if (category === Category.Daily) {
             let dailyQuestion = await getDailyQuestion()
-            return [new ProblemItem(dailyQuestion.question.title)]
+            return [new ProblemListItem(dailyQuestion.question.title)]
         }
 
         let result: ProblemSet
@@ -82,17 +101,19 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ProblemItem> 
                 return []
         }
 
-        let problems = result.questions.map<ProblemItem>((v) => {
-            return new ProblemItem(v.title)
+        let problems = result.questions.map<ProblemListItem>((v) => {
+            return new ProblemListItem(v.title)
         })
         return problems
     }
-}   
+
+
+}
 
 enum Category {
     Daily,
     All,
-    Categories, 
+    Categories,
     Algorithms,
     Concurrency,
     Database,
@@ -101,28 +122,23 @@ enum Category {
     Shell,
 }
 
-class ProblemSetItem extends vscode.TreeItem {
+class ProblemSetListItem extends vscode.TreeItem {
     category: Category
 
-    constructor(
-        public readonly name: string,
-        public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-        category: Category,
-    ) {
-        super(name, collapsibleState)
+    constructor(public readonly name: string, category: Category,) {
+        super(name, vscode.TreeItemCollapsibleState.Collapsed)
         this.category = category
+        this.iconPath = new vscode.ThemeIcon("folder")
     }
 }
 
-class ProblemItem extends vscode.TreeItem {
-    constructor(
-        public readonly name: string,
-    ) {
-        super(name)
+export class ProblemListItem extends vscode.TreeItem {
+    constructor(public readonly name: string) {
+        super(name, vscode.TreeItemCollapsibleState.None)
+        this.command = {
+            command: "betterLeetcode.previewProblem",
+            arguments: [this],
+            title: "Preview problem"
+        }
     }
-
-    // iconPath = {
-    //     light: path.join(__filename, '..', '..', 'resources', 'light', 'dependency.svg'),
-    //     dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
-    // };
-}
+}  
