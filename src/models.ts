@@ -13,20 +13,23 @@ export enum Difficulty {
     Easy = "Easy",
     Medium = "Medium",
     Hard = "Hard",
-} 
- 
+}
+
 export interface ProblemSet {
     questions: Array<Question>
-    total: number 
+    total: number
 }
 
 export interface Question {
     acRate: number
+    content?: string
+    dataSchemas?: Array<string>
     difficulty: Difficulty
     frontendQuestionId: number,
     hasSolution: boolean
     hasVideoSolution: boolean
     isFavor: boolean
+    mysqlSchemas?: Array<string>
     paidOnly: boolean
     status: string
     title: string

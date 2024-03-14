@@ -4,26 +4,26 @@ import { leetRequest } from "./request"
 const operationName = "questionOfToday"
 
 interface response {
-  activeDailyCodingChallengeQuestion: DailyQuestion
+    activeDailyCodingChallengeQuestion: DailyQuestion
 }
 
 export const getDailyQuestion = async (): Promise<DailyQuestion> => {
-  let res = await leetRequest<Data<response>>(dailyQuery, {
-    operationName: operationName 
-  })
-  return res.data.activeDailyCodingChallengeQuestion
+    const res = await leetRequest<Data<response>>(dailyQuery, {
+        operationName: operationName
+    })
+    return res.data.activeDailyCodingChallengeQuestion
 }
 
 const dailyQuery = `#graphql
 query questionOfToday {
   activeDailyCodingChallengeQuestion {
     date
-    userStatus
-    link
+    userStatus  
+    link 
     question {
-      acRate
+      acRate  
       difficulty
-    #   freqBar see models.ts
+    #   freqBar see models.ts 
       frontendQuestionId: questionFrontendId
       isFavor
       paidOnly: isPaidOnly

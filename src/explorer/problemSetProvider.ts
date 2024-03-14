@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
 import { getDailyQuestion } from "../api/daily"
 import { CategorySlug, getQuestionList } from "../api/problems"
-import { ProblemSet } from "../models"
+import { ProblemSet, Question } from "../models"
 
 type ListItem = ProblemSetListItem | ProblemListItem
 
@@ -12,11 +12,6 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
     constructor(context: vscode.ExtensionContext) {
         context.subscriptions.push(
             vscode.commands.registerCommand("betterLeetcode.refreshProblems", this.refresh),
-            vscode.commands.registerCommand("betterLeetcode.previewProblem",
-                (p: ProblemListItem) => {
-                    vscode.window.showInformationMessage(`clicked on ${p.name}`)
-                }
-            ),
             vscode.window.createTreeView("betterLeetcodeProblems", { treeDataProvider: this })
         )
     }
@@ -34,7 +29,7 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
             return Promise.resolve(this.getRootCategories())
         }
 
-        if (item instanceof ProblemSetListItem) { // folders 
+        if (item instanceof ProblemSetListItem) { // folders
             return Promise.resolve(this.getSubCategories(item.category))
         }
 
@@ -50,59 +45,59 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
         ]
     }
 
-    private async getSubCategories(category: Category): Promise<Array<ProblemListItem>> {
+    private async getSubCategories(category: Category): Promise<Array<ListItem>> {
         switch (category) {
-            case Category.Categories:
-                return [
-                    new ProblemSetListItem("Algorithms", Category.Algorithms),
-                    new ProblemSetListItem("Concurrency", Category.Concurrency),
-                    new ProblemSetListItem("Database", Category.Database),
-                    new ProblemSetListItem("Javascript", Category.Javascript),
-                    new ProblemSetListItem("Pandas", Category.Pandas),
-                    new ProblemSetListItem("Shell", Category.Shell),
-                ]
+        case Category.Categories:
+            return [
+                new ProblemSetListItem("Algorithms", Category.Algorithms),
+                new ProblemSetListItem("Concurrency", Category.Concurrency),
+                new ProblemSetListItem("Database", Category.Database),
+                new ProblemSetListItem("Javascript", Category.Javascript),
+                new ProblemSetListItem("Pandas", Category.Pandas),
+                new ProblemSetListItem("Shell", Category.Shell),
+            ]
 
             // Categories with no sub-categories handled here
-            default:
-                return this.getCategoryProblems(category)
+        default:
+            return this.getCategoryProblems(category)
         }
     }
 
-    private async getCategoryProblems(category: Category): Promise<Array<ProblemListItem>> {
+    private async getCategoryProblems(category: Category): Promise<Array<ListItem>> {
         if (category === Category.Daily) {
-            let dailyQuestion = await getDailyQuestion()
-            return [new ProblemListItem(dailyQuestion.question.title)]
+            const dailyQuestion = await getDailyQuestion()
+            return [new ProblemListItem(dailyQuestion.question)]
         }
 
         let result: ProblemSet
         switch (category) {
-            case Category.All:
-                result = await getQuestionList(CategorySlug.ALL, {}, 5000, 0)
-                break
-            case Category.Algorithms:
-                result = await getQuestionList(CategorySlug.Algorithms, {}, 5000, 0)
-                break
-            case Category.Concurrency:
-                result = await getQuestionList(CategorySlug.Concurrency, {}, 5000, 0)
-                break
-            case Category.Database:
-                result = await getQuestionList(CategorySlug.Database, {}, 5000, 0)
-                break
-            case Category.Javascript:
-                result = await getQuestionList(CategorySlug.Javascript, {}, 5000, 0)
-                break
-            case Category.Pandas:
-                result = await getQuestionList(CategorySlug.Pandas, {}, 5000, 0)
-                break
-            case Category.Shell:
-                result = await getQuestionList(CategorySlug.Shell, {}, 5000, 0)
-                break
-            default:
-                return []
+        case Category.All:
+            result = await getQuestionList(CategorySlug.ALL, {}, 5000, 0)
+            break
+        case Category.Algorithms:
+            result = await getQuestionList(CategorySlug.Algorithms, {}, 5000, 0)
+            break
+        case Category.Concurrency:
+            result = await getQuestionList(CategorySlug.Concurrency, {}, 5000, 0)
+            break
+        case Category.Database:
+            result = await getQuestionList(CategorySlug.Database, {}, 5000, 0)
+            break
+        case Category.Javascript:
+            result = await getQuestionList(CategorySlug.Javascript, {}, 5000, 0)
+            break
+        case Category.Pandas:
+            result = await getQuestionList(CategorySlug.Pandas, {}, 5000, 0)
+            break
+        case Category.Shell:
+            result = await getQuestionList(CategorySlug.Shell, {}, 5000, 0)
+            break
+        default:
+            return []
         }
 
-        let problems = result.questions.map<ProblemListItem>((v) => {
-            return new ProblemListItem(v.title)
+        const problems = result.questions.map<ProblemListItem>((v) => {
+            return new ProblemListItem(v)
         })
         return problems
     }
@@ -133,12 +128,16 @@ class ProblemSetListItem extends vscode.TreeItem {
 }
 
 export class ProblemListItem extends vscode.TreeItem {
-    constructor(public readonly name: string) {
-        super(name, vscode.TreeItemCollapsibleState.None)
+    constructor(public readonly question: Question) {
+        super(
+            `${question.frontendQuestionId}. ${question.title}`,
+            vscode.TreeItemCollapsibleState.None
+        )
+        this.question = question
         this.command = {
             command: "betterLeetcode.previewProblem",
-            arguments: [this],
+            arguments: [this.question],
             title: "Preview problem"
         }
     }
-}  
+}

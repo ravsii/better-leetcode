@@ -14,7 +14,7 @@ Note: This is still in alpha:
 * [x] Problem list
 * [ ] Individual problem
   * [x] API
-  * [ ] New Preview tab
+  * [x] New Preview tab
   * [ ] New tab with actual code
 * [ ] Sending submissions
   * [ ] Tests
