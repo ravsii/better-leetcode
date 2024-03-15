@@ -3,16 +3,25 @@ import { getDailyQuestion } from "../api/daily"
 import { CategorySlug, getQuestionList } from "../api/problems"
 import { ProblemSet, Question } from "../models"
 
-type ListItem = ProblemSetListItem | ProblemListItem
+export type ListItem = ProblemSetListItem | ProblemListItem;
 
 export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
-    private _onDidChangeTreeData: vscode.EventEmitter<ListItem | undefined | null | void> = new vscode.EventEmitter<ListItem | undefined | null | void>()
-    readonly onDidChangeTreeData: vscode.Event<ListItem | undefined | null | void> = this._onDidChangeTreeData.event
+    private _onDidChangeTreeData: vscode.EventEmitter<
+    ListItem | undefined | null | void
+  > = new vscode.EventEmitter<ListItem | undefined | null | void>()
+    readonly onDidChangeTreeData: vscode.Event<
+    ListItem | undefined | null | void
+  > = this._onDidChangeTreeData.event
 
     constructor(context: vscode.ExtensionContext) {
         context.subscriptions.push(
-            vscode.commands.registerCommand("betterLeetcode.refreshProblems", this.refresh),
-            vscode.window.createTreeView("betterLeetcodeProblems", { treeDataProvider: this })
+            vscode.commands.registerCommand(
+                "betterLeetcode.refreshProblems",
+                this.refresh,
+            ),
+            vscode.window.createTreeView("betterLeetcodeProblems", {
+                treeDataProvider: this,
+            }),
         )
     }
 
@@ -25,11 +34,13 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
     }
 
     async getChildren(item?: ListItem): Promise<ListItem[]> {
-        if (!item) { // root
+        if (!item) {
+            // root
             return Promise.resolve(this.getRootCategories())
         }
 
-        if (item instanceof ProblemSetListItem) { // folders
+        if (item instanceof ProblemSetListItem) {
+            // folders
             return Promise.resolve(this.getSubCategories(item.category))
         }
 
@@ -63,7 +74,9 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
         }
     }
 
-    private async getCategoryProblems(category: Category): Promise<Array<ListItem>> {
+    private async getCategoryProblems(
+        category: Category,
+    ): Promise<Array<ListItem>> {
         if (category === Category.Daily) {
             const dailyQuestion = await getDailyQuestion()
             return [new ProblemListItem(dailyQuestion.question)]
@@ -101,26 +114,27 @@ export class ProblemSetProvider implements vscode.TreeDataProvider<ListItem> {
         })
         return problems
     }
-
-
 }
 
 enum Category {
-    Daily,
-    All,
-    Categories,
-    Algorithms,
-    Concurrency,
-    Database,
-    Javascript,
-    Pandas,
-    Shell,
+  Daily,
+  All,
+  Categories,
+  Algorithms,
+  Concurrency,
+  Database,
+  Javascript,
+  Pandas,
+  Shell,
 }
 
 class ProblemSetListItem extends vscode.TreeItem {
     category: Category
 
-    constructor(public readonly name: string, category: Category,) {
+    constructor(
+    public readonly name: string,
+    category: Category,
+    ) {
         super(name, vscode.TreeItemCollapsibleState.Collapsed)
         this.category = category
         this.iconPath = new vscode.ThemeIcon("folder")
@@ -131,13 +145,14 @@ export class ProblemListItem extends vscode.TreeItem {
     constructor(public readonly question: Question) {
         super(
             `${question.frontendQuestionId}. ${question.title}`,
-            vscode.TreeItemCollapsibleState.None
+            vscode.TreeItemCollapsibleState.None,
         )
         this.question = question
         this.command = {
             command: "betterLeetcode.previewProblem",
             arguments: [this.question],
-            title: "Preview problem"
+            title: "Preview problem",
         }
+        this.contextValue = "problem"
     }
 }

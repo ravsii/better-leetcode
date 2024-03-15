@@ -4,13 +4,15 @@ import { Session, SessionStorage } from "./session"
 
 export const signIn = async () => {
     const ss = SessionStorage.instance
-    let curSession = await ss.get()
+    const curSession = await ss.get()
     if (curSession) {
-        vscode.window.showInformationMessage(`You already signed in as ${curSession.username}`)
+        vscode.window.showInformationMessage(
+            `You already signed in as ${curSession.username}`,
+        )
         return
     }
 
-    let username = await vscode.window.showInputBox({ 
+    const username = await vscode.window.showInputBox({
         placeHolder: "username",
         ignoreFocusOut: true,
         prompt: "Just a username, not an email",
@@ -22,7 +24,7 @@ export const signIn = async () => {
         return
     }
 
-    let userToken = await vscode.window.showInputBox({
+    const userToken = await vscode.window.showInputBox({
         placeHolder: "csrftoken",
         password: true,
         ignoreFocusOut: true,
@@ -35,36 +37,39 @@ export const signIn = async () => {
         return
     }
 
-    let newSession: Session = {
+    const newSession: Session = {
         token: userToken,
         username: username,
     }
 
-    vscode.window.withProgress({
-        location: vscode.ProgressLocation.Notification,
-        title: "Singing in...",
-        cancellable: true
-    }, async (_, token) => {
-        token.onCancellationRequested(() => {
-            console.log("User canceled the long running operation")
-        })
+    vscode.window.withProgress(
+        {
+            location: vscode.ProgressLocation.Notification,
+            title: "Singing in...",
+            cancellable: true,
+        },
+        async (_, token) => {
+            token.onCancellationRequested(() => {
+                console.log("User canceled the long running operation")
+            })
 
-        await ss.store(newSession)
-        if (!await authPing()) {
-            vscode.window.showErrorMessage("Can't ping")
-            await ss.delete()
+            await ss.store(newSession)
+            if (!(await authPing())) {
+                vscode.window.showErrorMessage("Can't ping")
+                await ss.delete()
+                return
+            }
+
             return
-        }
-
-        return
-    })
+        },
+    )
 
     await vscode.window.showInformationMessage(`Hello, ${newSession.username}`)
 }
 
 export const signOut = async () => {
     const ss = SessionStorage.instance
-    let curSession = await ss.get()
+    const curSession = await ss.get()
     if (!curSession) {
         vscode.window.showInformationMessage("You are not signed in")
         return

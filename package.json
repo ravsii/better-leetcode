@@ -13,19 +13,45 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": [
+      {
+        "title": "Better Leetcode",
+        "properties": {
+          "betterLeetcode.storePath": {
+            "type": "string",
+            "default": "$HOME/.leetcode",
+            "description": "Where local leetcode file will be stored",
+            "scope": "application"
+          }
+        }
+      }
+    ],
     "commands": [
       {
         "command": "betterLeetcode.signIn",
-        "title": "Better Leetcode: Sign In"
+        "title": "Sign In",
+        "category": "Better Leetcode"
       },
       {
         "command": "betterLeetcode.signOut",
-        "title": "Better Leetcode: Sign Out"
+        "title": "Sign Out",
+        "category": "Better Leetcode"
       },
       {
         "command": "betterLeetcode.refreshProblems",
         "title": "Refresh",
-        "icon": "$(extensions-refresh)"
+        "icon": "$(extensions-refresh)",
+        "category": "Better Leetcode"
+      },
+      {
+        "command": "betterLeetcode.previewProblem",
+        "title": "Preview Problem",
+        "category": "LeetCode"
+      },
+      {
+        "command": "betterLeetcode.openProblem",
+        "title": "Open Problem",
+        "category": "LeetCode"
       }
     ],
     "viewsContainers": {
@@ -49,6 +75,12 @@
           "command": "betterLeetcode.refreshProblems",
           "when": "view == betterLeetcodeProblems",
           "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "betterLeetcode.openProblem",
+          "when": "view == betterLeetcodeProblems && viewItem == problem"
         }
       ]
     },
@@ -85,7 +117,7 @@
     "@stylistic/eslint-plugin-js": "^1.7.0",
     "@types/markdown-it": "^13.0.7",
     "@types/mocha": "^10.0.6",
-    "@types/node": "20.x",
+    "@types/node": "^20.11.28",
     "@types/vscode": "^1.87.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
@@ -94,9 +126,8 @@
     "eslint": "^8.57.0",
     "markdown-it": "^14.0.0",
     "node-html-markdown": "^1.3.0",
-    "prettier-eslint": "^16.3.0",
     "prettier": "^3.2.5",
+    "prettier-eslint": "^16.3.0",
     "typescript": "^5.4.2"
-  },
-  "dependencies": {}
+  }
 }

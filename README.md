@@ -25,10 +25,10 @@ Note: This is still in alpha:
 * [ ] Stats - In Progress
 * [ ] Search
 * [ ] Sessions
-* [ ] Settings
+* [x] Settings
   * [ ] Langs
     * [ ] Fallback lang?
-  * [ ] Files location
+  * [x] Files location
 
 ## Inspiration
 
