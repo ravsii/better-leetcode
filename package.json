@@ -17,11 +17,83 @@
       {
         "title": "Better Leetcode",
         "properties": {
-          "betterLeetcode.storePath": {
+          "betterLeetcode.workspacePath": {
             "type": "string",
             "default": "$HOME/.leetcode",
-            "description": "Where local leetcode file will be stored",
+            "description": "Full path to local leetcode workspace (where local files will be stored)",
             "scope": "application"
+          },
+          "betterLeetcode.preferredLanguage": {
+            "type": "string",
+            "enum": [
+              "bash",
+              "c",
+              "cpp",
+              "csharp",
+              "dart",
+              "elixir",
+              "erlang",
+              "golang",
+              "java",
+              "javascript",
+              "kotlin",
+              "mssql",
+              "mysql",
+              "oraclesql",
+              "php",
+              "postgresql",
+              "python",
+              "python3",
+              "pythondata",
+              "pythonml",
+              "racket",
+              "react",
+              "ruby",
+              "rust",
+              "scala",
+              "swift",
+              "typescript",
+              "vanillajs"
+            ],
+            "default": "python",
+            "scope": "application",
+            "markdownDescription": "What language to use when solving problems\n\n**Note**: not all problems support every language.\nIf you solve multiple types of problem (ie js and mysql), make use of `#betterLeetcode.fallbackLanguage#`"
+          },
+          "betterLeetcode.fallbackLanguage": {
+            "type": "string",
+            "enum": [
+              "bash",
+              "c",
+              "cpp",
+              "csharp",
+              "dart",
+              "elixir",
+              "erlang",
+              "golang",
+              "java",
+              "javascript",
+              "kotlin",
+              "mssql",
+              "mysql",
+              "oraclesql",
+              "php",
+              "postgresql",
+              "python",
+              "python3",
+              "pythondata",
+              "pythonml",
+              "racket",
+              "react",
+              "ruby",
+              "rust",
+              "scala",
+              "swift",
+              "typescript",
+              "vanillajs"
+            ],
+            "default": "java",
+            "scope": "application",
+            "markdownDescription": "Will be used if instead of `#betterLeetcode.preferredLanguage#`, if its unavailable"
           }
         }
       }
