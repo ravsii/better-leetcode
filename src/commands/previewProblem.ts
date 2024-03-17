@@ -1,7 +1,7 @@
 import MarkdownIt from "markdown-it"
 import { NodeHtmlMarkdown } from "node-html-markdown"
 import * as vscode from "vscode"
-import { getQuestionContent } from "../api/question_content"
+import { getQuestionContent } from "../api/questionContent"
 import { Question } from "../models"
 import { previewWebview } from "../webview/previewProvider"
 
@@ -9,9 +9,9 @@ const htmlToMD = new NodeHtmlMarkdown({ maxConsecutiveNewlines: 2 })
 const md = MarkdownIt()
 
 export const previewProblem = async (q: Question) => {
-    const questionContent = await getQuestionContent(q.titleSlug)
-    if (questionContent?.content) {
-        let previewContent = htmlToMD.translate(questionContent.content)
+    const content = await getQuestionContent(q.titleSlug)
+    if (content?.content) {
+        let previewContent = htmlToMD.translate(content.content)
         previewContent = updateText(q, previewContent)
         previewWebview.show(q.title, md.render(previewContent))
     } else {

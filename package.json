@@ -118,12 +118,17 @@
       {
         "command": "betterLeetcode.previewProblem",
         "title": "Preview Problem",
-        "category": "LeetCode"
+        "category": "Better Leetcode"
       },
       {
         "command": "betterLeetcode.openProblem",
         "title": "Open Problem",
-        "category": "LeetCode"
+        "category": "Better Leetcode"
+      },
+      {
+        "command": "betterLeetcode.testSolution",
+        "title": "Test Solution",
+        "category": "Better Leetcode"
       }
     ],
     "viewsContainers": {

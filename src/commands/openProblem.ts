@@ -1,6 +1,6 @@
 import * as path from "path"
 import * as vscode from "vscode"
-import { getQuestionCode } from "../api/question_code"
+import { getQuestionCode } from "../api/questionCode"
 import { ProblemListItem } from "../explorer/problemSetProvider"
 import { Question } from "../models"
 import { settings } from "../settings"

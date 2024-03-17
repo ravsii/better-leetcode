@@ -3,6 +3,7 @@ import { signIn, signOut } from "./auth/auth"
 import { SessionStorage } from "./auth/session"
 import { openProblem } from "./commands/openProblem"
 import { previewProblem } from "./commands/previewProblem"
+import { testSolution } from "./commands/testSolution"
 import { ProblemSetProvider } from "./explorer/problemSetProvider"
 import { StatsProvider } from "./explorer/statsProvider"
 import { previewWebview } from "./webview/previewProvider"
@@ -25,6 +26,10 @@ export function activate(context: vscode.ExtensionContext) {
             previewProblem,
         ),
         vscode.commands.registerCommand("betterLeetcode.openProblem", openProblem),
+        vscode.commands.registerCommand(
+            "betterLeetcode.testSolution",
+            testSolution,
+        ),
 
         // views
         vscode.window.createTreeView("betterLeetcodeStats", {

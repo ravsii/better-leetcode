@@ -1,18 +1,20 @@
-import { Data, Question } from "../models"
+import { Data, QuestionContent } from "../models"
 import { leetRequest } from "./request"
 
 const operationName = "questionContent"
 
 interface response {
-  question: Question
+  question: QuestionContent;
 }
 
-export const getQuestionContent = async (titleSlug: string): Promise<Question> => {
+export const getQuestionContent = async (
+    titleSlug: string,
+): Promise<QuestionContent> => {
     const res = await leetRequest<Data<response>>(dailyQuery, {
         operationName: operationName,
         variables: {
-            titleSlug: titleSlug
-        }
+            titleSlug: titleSlug,
+        },
     })
     return res.data.question
 }

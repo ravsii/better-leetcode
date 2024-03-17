@@ -10,26 +10,30 @@ export enum CategorySlug {
   Database = "database",
   Javascript = "javascript",
   Pandas = "pandas",
-  Shell = "shell", 
+  Shell = "shell",
 }
 
-export const getQuestionList = async (category: CategorySlug, filters = {}, limit = 100, skip = 0): Promise<ProblemSet> => {
-  let res = await leetRequest<Data<response>>(problemsQuery, {
-    operationName: operationName,
-    variables: {
-      categorySlug: category,
-      filters: filters,
-      limit: limit,
-      skip: skip,
-    }
-  })
-  return res.data.problemsetQuestionList
+export const getQuestionList = async (
+    category: CategorySlug,
+    filters = {},
+    limit = 100,
+    skip = 0,
+): Promise<ProblemSet> => {
+    const res = await leetRequest<Data<response>>(problemsQuery, {
+        operationName: operationName,
+        variables: {
+            categorySlug: category,
+            filters: filters,
+            limit: limit,
+            skip: skip,
+        },
+    })
+    return res.data.problemsetQuestionList
 }
 
 interface response {
-  problemsetQuestionList: ProblemSet
+  problemsetQuestionList: ProblemSet;
 }
-
 
 const problemsQuery = `#graphql
 query problemsetQuestionList($categorySlug: String, $limit: Int, $skip: Int, $filters: QuestionListFilterInput) {

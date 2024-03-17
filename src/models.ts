@@ -20,11 +20,15 @@ export interface ProblemSet {
   total: number;
 }
 
+export interface QuestionContent {
+  content?: string;
+  mysqlSchemas?: Array<string>;
+  dataSchemas?: Array<string>;
+}
+
 export interface Question {
   acRate: number;
   codeSnippets?: Array<QuestionCodeSnippers>;
-  content?: string;
-  dataSchemas?: Array<string>;
   difficulty: Difficulty;
   enableRunCode?: boolean;
   envInfo?: string;
@@ -35,7 +39,6 @@ export interface Question {
   hasSolution: boolean;
   hasVideoSolution: boolean;
   isFavor: boolean;
-  mysqlSchemas?: Array<string>;
   paidOnly: boolean;
   questionFrontendId?: number;
   questionId?: number;
@@ -51,8 +54,41 @@ export interface QuestionCodeSnippers {
   code: string;
 }
 
+export interface QuestionTest extends Question, QuestionCodeSnippers {}
+
 export interface TopicTag {
   name: string;
   id: string;
   slug: string;
+}
+
+export enum Lang {
+  "bash",
+  "c",
+  "cpp",
+  "csharp",
+  "dart",
+  "elixir",
+  "erlang",
+  "golang",
+  "java",
+  "javascript",
+  "kotlin",
+  "mssql",
+  "mysql",
+  "oraclesql",
+  "php",
+  "postgresql",
+  "python",
+  "python3",
+  "pythondata",
+  "pythonml",
+  "racket",
+  "react",
+  "ruby",
+  "rust",
+  "scala",
+  "swift",
+  "typescript",
+  "vanillajs",
 }

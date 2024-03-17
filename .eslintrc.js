@@ -36,6 +36,8 @@ module.exports = {
             "error",
             4
         ],
+        "camelcase": ["error"],
+        "prefer-const": ["error"],
         "@stylistic/js/linebreak-style": [
             "error",
             "unix"

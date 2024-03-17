@@ -1,8 +1,8 @@
 import { ExtensionContext, SecretStorage, commands } from "vscode"
 
 export interface Session {
-    token: string
-    username: string
+  token: string;
+  username: string;
 }
 
 const SESSION_KEY = "session"
@@ -11,11 +11,11 @@ const CTX_SIGNED_IN = "betterLeetcode.signedIn"
 export class SessionStorage {
     private static _instance: SessionStorage
 
-    constructor(private secretStorage: SecretStorage) { } 
+    constructor(private secretStorage: SecretStorage) {}
 
     static async init(context: ExtensionContext): Promise<void> {
         SessionStorage._instance = new SessionStorage(context.secrets)
-        let ss = SessionStorage._instance
+        const ss = SessionStorage._instance
         if (await ss.get()) {
             ss.setSignedIn()
         }
@@ -31,7 +31,7 @@ export class SessionStorage {
     }
 
     async get(): Promise<Session | undefined> {
-        let sessionData = await this.secretStorage.get(SESSION_KEY)
+        const sessionData = await this.secretStorage.get(SESSION_KEY)
         if (!sessionData) {
             return
         }
