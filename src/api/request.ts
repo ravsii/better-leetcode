@@ -25,36 +25,40 @@ interface opts {
  * @returns response.json() as T
  */
 export const leetRequest = async <T>(
-    query: string,
-    opts: opts = {},
+  query: string,
+  opts: opts = {},
 ): Promise<T> => {
-    opts.method = "POST"
+  opts.method = "POST"
 
-    const body: queryBody = { query: query }
-    if (opts.variables) {
-        body.variables = opts.variables
-    }
-    if (opts.operationName) {
-        body.operationName = opts.operationName
-    }
+  const body: queryBody = { query: query }
+  if (opts.variables) {
+    body.variables = opts.variables
+  }
+  if (opts.operationName) {
+    body.operationName = opts.operationName
+  }
 
-    return leetURLRequest(endpoint, "POST", body)
+  return leetURLRequest(endpoint, "POST", body)
 }
 
 export const leetURLRequest = async <T>(
-    url: URL,
-    method: string,
-    body: object,
+  url: URL,
+  method: string,
+  body?: object,
 ): Promise<T> => {
-    const token = SessionStorage.instance.get()
+  const token = SessionStorage.instance.get()
 
-    const response = await fetch(url, {
-        method: method,
-        headers: {
-            "Content-Type": "application/json",
-            Cookie: `csrftoken=${token}`,
-        },
-        body: JSON.stringify(body),
-    })
-    return response.json() as T
+  const req: RequestInit = {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: `csrftoken=${token}`,
+    },
+  }
+
+  if (body) {
+    req.body = JSON.stringify(body)
+  }
+
+  return await fetch(url, req) as T
 }
